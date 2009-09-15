@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}Entry details{% endblock %}
+
+{% block content %}
+    <h2>{{object.author}} : {{object.body}}</h2>
+    {% if object.link %}
+    <a href="{{object.link}}" title="{{ object.body }}">{{ object.link }}</a>
+    {% endif %}
+{% endblock %}

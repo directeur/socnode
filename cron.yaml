@@ -1,0 +1,5 @@
+cron:
+- description: fetch non hub subscriptions
+  url: /subscriptions/cron/
+  schedule: every 5 minutes
+

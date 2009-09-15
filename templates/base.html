@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>{% block title %}{% endblock %}{{ TITLE }}</title>
+    <link href="/static/css/ui.css" rel="stylesheet" type="text/css"/>
+    {% if feed_url %}
+    <link rel="alternate" href="{{ feed_url }}" type="application/atom+xml" title="{{ TITLE }}"/>
+    {% endif %}
+    <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png"/>
+    <script type="text/javascript" src="/static/js/jquery.min.js"></script>
+    <script type="text/javascript" src="/static/js/roundies.js"></script>
+    <script src="/static/js/ui.js" type="text/javascript"></script>
+    {% block extra_head %}{% endblock %}
+</head>
+<body>
+    <div id="wrapper">
+    <div id="sidebar">
+        
+        <div id="menu">
+            {% if user.is_authenticated %}
+            <p>
+                Welcome back, <em>{{ user.username }}</em>!
+            </p>
+            {% endif %}
+            <ul>
+                <li><a href="{% url blog.views.list_all_entries %}">Home</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url blog.views.show_author_entries username=user.username %}">My entries</a></li>
+                    <li><a href="{% url blog.views.show_foaf_entries username=user.username %}">Me and my friends</a></li>
+            </ul>
+            <h2>Manage Subscriptions </h2>
+            <ul>
+                    <li><a href="{% url subscriptions.views.list_subscriptions %}?kind=service">My Services</a></li>
+                    <li><a href="{% url subscriptions.views.list_subscriptions %}?kind=friend">My Friends Feeds</a></li>
+                    <li><a href="{% url django.contrib.auth.views.logout %}">Logout</a></li>
+            </ul>
+
+                {% else %}
+                <ul>
+                    {% if username %}
+                    <li><a href="{% url blog.views.show_author_entries username=username %}">{{ username }}'s entries</a></li>
+                    <li><a href="{% url blog.views.show_foaf_entries username=username %}">{{ username }} and friends</a></li>
+                    {% endif %}
+                    <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
+                </ul>
+                {% endif %}
+        </div>
+        <div id="feedlinks">
+                    {% if user.is_authenticated %}
+                        <h2>Subscribe to my Node</h2>
+                        <ul>
+                        <li><a href="{% url blog.views.author_feed username=user.username %}">My entries</a></li>
+                        <li><a href="{% url blog.views.foaf_feed username=user.username %}">Me and my friends</a></li>
+                        </ul>
+                    {% else %}
+                        {% if username %}
+                        <h2>Subscribe to {{ username }}'s Node</h2>
+                        <ul>
+                        <li><a href="{% url blog.views.author_feed username=username %}">{{ username }}'s entries</a></li>
+                        <li><a href="{% url blog.views.foaf_feed username=username %}">{{ username }} and friends</a></li>
+                        </ul>
+                        {% endif %}
+                    {% endif %}
+                </div>
+
+    </div>
+
+    <div id="content">
+        <h1>
+            <a href="/" title="home"><img src="/static/images/logo.png" width="250" height="74"alt="Socnode" /></a>
+        </h1>
+        <div id="blog-description">
+            <p>
+            Hello and welcome on SocNode ; implemented with some Dango magic.
+            </p>
+        </div>
+        {% block content %}
+        {% endblock %}
+    </div>
+    
+    <div id="footer">
+        <p>
+        Brought to you by <a href="http://socialwhois.com/directeur" title="directeur">directeur</a>. This is a Django implementation of <a
+            href="http://socnode.org" title="Socnode, the basic element of
+            distributed social networks">Socnodes</a>.
+        </p>
+    </div>
+    </div><!--wrapper-->
+</body>
+</html>

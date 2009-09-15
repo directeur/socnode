@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Delete entry{% endblock %}
+
+{% block content %}
+<h1>Delete entry</h1>
+<a href="{% url blog.views.list_all_entries %}">Back to listing</a>
+<a href="{% url blog.views.show_entry key=object.key %}">Back to entry</a>
+
+<p>
+Do you really want to delete {{ object.body }} by {{ object.author }}?
+
+<form action="" method="post">
+  <input type="submit" name="delete" value="Delete" />
+</form>
+</p>
+
+{% endblock %}

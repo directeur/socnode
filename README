@@ -1,0 +1,35 @@
+This is an implementation of socnodes (http://socnode.org) in django using the
+app-engine patch.
+This is currently a proof of concept, so your contribution is verry welcome!
+
+Requirements:
+=============
+This django app is destined to be run on google appengine platform hence it
+requires from you a google app engine, which you can get freely here:
+http://appengine.google.com
+
+This app is built thanks to the port of django called app-engine-patch.
+You should download it here: http://code.google.com/p/app-engine-patch/
+
+Installation:
+=============
+
+1) download app-engine-patch and unzip everything to a directory
+2) Get a Google App Engine account at http://appengine.google.com
+3) Create a new application.  Note your application identifier.
+4) Edit the included app.yaml.sample:
+    i) Change the text APPLICATION_IDENTIFIER to the application identifier
+    created in step 2.
+    ii) Rename it to app.yaml
+5) Edit templates/base.html to make it your own (optional).
+5) Copy everyhting you grab here to the directory created in (1)
+6) Deploy by running:
+    python manage.py update
+
+More information about socnodes could be found here:
+http://socnode.org
+
+Oh, and if you're using it, please let me know:
+directeur <directeur@gmail.com>
+
+

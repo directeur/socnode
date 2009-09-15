@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Create Entry{% endblock %}
+
+{% block content %}
+<h1>Create Entry</h1>
+<a href="{% url blog.views.list_all_entries %}">Back to listing</a>
+
+<form action="" method="post">
+  <table>
+    {{ form.as_table }}
+    <tr><td colspan="2">
+      <input type="submit"
+        value="{% if object %}Apply changes{% else %}Create{% endif %}" />
+    </td></tr>
+  </table>
+</form>
+{% endblock %}

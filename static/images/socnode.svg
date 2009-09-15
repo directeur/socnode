@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="300"
+   height="200"
+   id="svg2"
+   sodipodi:version="0.32"
+   inkscape:version="0.46"
+   version="1.0"
+   sodipodi:docname="socnode.svg"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
+  <defs
+     id="defs4">
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       id="perspective10" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     gridtolerance="10000"
+     guidetolerance="10"
+     objecttolerance="10"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="2.9"
+     inkscape:cx="150"
+     inkscape:cy="100"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     inkscape:window-width="1022"
+     inkscape:window-height="766"
+     inkscape:window-x="0"
+     inkscape:window-y="0" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1">
+    <g
+       id="g3165">
+      <text
+         id="text2383"
+         y="102.75862"
+         x="44.827587"
+         style="font-size:6px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+         xml:space="preserve"><tspan
+           style="font-size:40px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;font-family:DejaVu Sans;-inkscape-font-specification:DejaVu Sans"
+           y="102.75862"
+           x="44.827587"
+           id="tspan2385"
+           sodipodi:role="line">socn  de</tspan></text>
+      <g
+         transform="translate(6.8965519,-48.62069)"
+         id="g3161">
+        <path
+           sodipodi:type="arc"
+           style="opacity:1;fill:none;fill-opacity:0.5288889;fill-rule:nonzero;stroke:#204a87;stroke-width:3.60000014;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="path2387"
+           sodipodi:cx="143.10345"
+           sodipodi:cy="140.51724"
+           sodipodi:rx="11.034483"
+           sodipodi:ry="10.517241"
+           d="M 154.13794,140.51724 A 11.034483,10.517241 0 1 1 150.00268,132.30927"
+           sodipodi:start="0"
+           sodipodi:end="5.3878314"
+           sodipodi:open="true"
+           transform="matrix(-0.969976,-0.2432006,-0.2432006,0.969976,316.08425,39.021728)" />
+        <path
+           sodipodi:type="arc"
+           style="opacity:1;fill:none;fill-opacity:0.5288889;fill-rule:nonzero;stroke:#204a87;stroke-width:1;stroke-linecap:round;stroke-linejoin:round;marker:none;marker-start:none;marker-mid:none;marker-end:none;stroke-miterlimit:4;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1;visibility:visible;display:inline;overflow:visible;enable-background:accumulate"
+           id="path3159"
+           sodipodi:cx="131.65979"
+           sodipodi:cy="131.91331"
+           sodipodi:rx="1.6686573"
+           sodipodi:ry="1.5592371"
+           d="M 133.32845,131.91331 A 1.6686573,1.5592371 0 1 1 129.99113,131.91331 A 1.6686573,1.5592371 0 1 1 133.32845,131.91331 z"
+           transform="matrix(1.375392,0,0,1.4017353,-47.016785,-51.7359)" />
+      </g>
+    </g>
+    <text
+       xml:space="preserve"
+       style="font-size:6.95706129px;font-style:normal;font-weight:normal;fill:#000000;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1;font-family:Bitstream Vera Sans"
+       x="50.143806"
+       y="115.84414"
+       id="text3192"
+       transform="scale(1.0095701,0.9905206)"><tspan
+         sodipodi:role="line"
+         id="tspan3194"
+         x="50.143806"
+         y="115.84414">The basic unit of distributed social networks</tspan></text>
+  </g>
+</svg>

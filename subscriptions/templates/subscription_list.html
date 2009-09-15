@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% block title %} Manage Subscriptions{% endblock %}
+
+{% block content %}
+{% ifequal kind 'service' %}
+<h2>Manage Your Services</h2>
+<p>
+Use this to input YOUR own sites and lifestream services
+</p>
+{% else %}
+<h2>Manage Your Friends' Feeds</h2>
+<p>
+Use this to input your FRIENDS' socnodes urlyour FRIENDS' socnodes urls
+</p>
+{% endifequal %}
+<p class="info">
+<img src="/static/images/icons/cron.png" width="16" height="16" alt="cron job fetch" />: 
+Entries are fetched with a cron job (no real time)<br />
+<img src="/static/images/icons/hub.png" width="16" height="16" alt="realtime" />: 
+A hub notifies you of new entries automatically (realtime)
+</p>
+
+<div id="subscription-form">
+    <form action="{% url subscriptions.views.add_subscription %}" method="post" id="subscform">
+        <p>
+        <label for="surl">Url: </label> 
+        <input type="text" size="50" name="surl" id="surl" />
+        {% ifequal kind 'service' %}
+            <input type="hidden" value="1" name ="is_service" />
+        {% else %}
+            <input type="hidden" value="0" name ="is_service" />
+        {% endifequal %}
+        <input type="submit" value="go!" name="ok" />
+        </p>
+    </form>
+</div>
+
+{% for subscription in object_list %}
+<div class="subscription">
+    <p>
+    {% if subscription.hub %}
+        <img src="/static/images/icons/hub.png" width="16" height="16" alt="real time" />
+    {% else %}
+        <img src="/static/images/icons/cron.png" width="16" height="16" alt="cron job fetch" />
+    {% endif%}
+    <a href="{{ subscription.url }}" title="{{ subscription.url }}">{{ subscription.url|urlizetrunc:35 }}</a>
+    <a href="{% url subscriptions.views.delete_subscription key=subscription.key %}" title="delete this feed" class="delsub">
+        <img src="/static/images/icons/delete.png" width="12" height="12" alt="delete" />
+    </a> 
+    </p>
+</div>
+{% endfor %}
+
+<div>
+  {% if has_previous %}
+    <a href="{% url subscriptions.views.list_subscriptions %}?page={{ previous }}">&lt;-previous</a>
+  {% endif %}
+  {% if has_next %}
+    <a href="{% url subscriptions.views.list_subscriptions %}?page={{ next }}">next-&gt;</a>
+  {% endif %}
+</div>
+{% endblock %}

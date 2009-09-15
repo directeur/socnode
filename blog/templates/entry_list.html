@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% load blog_tags %}
+
+{% block title %}Home{% endblock %}
+
+{% block extra_head %}
+{% if username %}
+<script type="text/javascript">
+    var URL = '/json/{{ username }}';
+    function _update_my_view(){
+        _update_view(URL);
+    }
+    //window.setInterval(_update_my_view, 1000);
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+
+<!-- templates for ajax -->
+<script type="text/html" id="post_tmpl">
+    <a href="<%=author_url%>"><%=author%></a>:
+    <span id="b-<%=key%>"><%=body%></span> <br />
+    <% if (link){ %>
+        <a href="<%=link%>" id="l-<%=key%>"><%=linktext%></a>
+    <% } %>
+    <div class="meta">
+    <a href="<%=permalink%>">0 seconds ago</a>
+     - 
+     <a href="<%=editlink%>" title="edit this entry" class="edit">Edit</a>
+     - 
+     <a href="<%=deletelink%>" title="delete this entry" class="delete">Delete</a>
+    </div>
+</script>
+
+<script type="text/html" id="postform_tmpl">
+<div class="editform-div">
+    <form method="post" class="editform" action="/edit/<%=key%>" id="f-<%=key%>">
+        <p>
+            <input type="text" value="<%=body%>" name="body" id="fb-<%=key%>" /><br />
+            <input type="text" value="<%=link%>" name="link" id="fl-<%=key%>" />
+        </p>
+        <p class="right">
+            <input type="submit" name="send" id="send" value="Post"/> 
+            <a href="#" title="cancel" class="cancel">cancel</a>
+        </p>
+    </form>
+    <span class="tmp" id="tmp-<%=key%>"><%=entry_html%></span>
+<div>
+</script>
+
+
+{% if user.is_authenticated %}
+<a href="#" title="Share Something" id="toggleshareform">Share Something</a>
+<div id="sharediv">
+<form method="post" action="{% url blog.views.add_entry %}" id="shareform">
+    <p>
+    <textarea rows="3" cols="40" name="body" id="body"></textarea>
+    </p>
+    <p>
+    <label for="link">Link (optional):</label>
+    <input type="text" name="link" id="link" class="urlinput" />
+    </p>
+    <p class="right">
+    <input type="submit" name="send" id="send" value="Post"/>
+    </p>
+</form>
+</div>
+{% endif %}
+
+<div id="entries">
+{% for entry in object_list %}
+<div class="post" id="{{ entry.key }}">
+    {% if entry.author_url %}
+        <a href="{{ entry.author_url }}">{{ entry.author }}</a>:
+    {% else %}
+        <a href="{% url blog.views.show_author_entries username=entry.author %}">{{ entry.author }}</a>:
+    {% endif %}
+    <span id="b-{{ entry.key }}">{{ entry.body}}</span> <br />
+    {% if entry.link %}
+    <a href="{{ entry.link }}" id="l-{{ entry.key }}">{{ entry.link|urlizetrunc:35 }}</a>
+    {% endif %}
+
+    <div class="meta">
+    <a href="{% url blog.views.show_entry key=entry.key %}">{{ entry.published|bettertimesince }}</a>
+    {% if entry.subscription %}
+    - From: 
+    <a href="{{ entry.subscription.url }}" title="{{ entry.subscription.title }}">
+        {{ entry.subscription.title }}
+    </a>
+    {% else %}
+    - Internal
+    {% endif %}
+    {% if user.is_authenticated %}
+        {% ifequal user.username entry.author %}
+         - 
+          <a href="{% url blog.views.edit_entry key=entry.key %}" title="edit this
+              entry" class="edit">Edit</a>
+         - 
+          <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete
+              this entry" class="delete">Delete</a>
+        {% endifequal %}
+    {% endif %}
+    </div>
+</div>
+{% endfor %}
+</div><!--entries-->
+
+<div>
+  {% if has_previous %}
+    <a href="{% url blog.views.list_all_entries %}?page={{ previous }}">&lt;-previous</a>
+  {% endif %}
+  {% if has_next %}
+    <a href="{% url blog.views.list_all_entries %}?page={{ next }}">next-&gt;</a>
+  {% endif %}
+</div>
+{% endblock %}

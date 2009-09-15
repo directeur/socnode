@@ -1,0 +1,8 @@
+*.pyc
+manage.py
+__init__.py
+app.yaml
+common/*
+.dynamic_media/*
+_generated_media/*
+registration/*

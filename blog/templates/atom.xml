@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>{{ feed_title }}</title>
+    <link rel="self" type="application/atom+xml" href="{{source}}"/>
+    <link rel="hub" href="http://pubsubhubbub.appspot.com"/>
+    {% if first_entry %}
+    <updated>{{first_entry.get_updated_zulu_time}}</updated>
+    {% endif %}
+    <id>{{source}}</id>
+    <author>
+        <name>{{ username }}</name>
+        <uri>{{ userpage }}</uri>
+    </author>
+
+{% if entries %}
+  {% for entry in entries %}
+    <entry>
+        {% if entry.subscription %}
+            {% if not entry.subscription.is_service %}
+                <author>
+                    <name>{{ entry.author}}</name>
+                    <uri>{{ entry.author_url }}</uri>
+                </author>
+                <source>
+                    <id>{{ entry.subscription.url }}</id>
+                    <link rel="self" href="{{ entry.subscription.feed_url }}" />
+                </source>
+            {% else %}
+                <author>
+                    <name>{{ username }}</name>
+                    <uri>{{ userpage}}</uri>
+                </author>
+                <source>
+                    <id>{{ userpage }}</id>
+                    <link rel="self" href="{{ source }}" />
+                </source>
+            {% endif %}
+        {% else %}
+            <author>
+                <name>{{ username }}</name>
+                <uri>{{ userpage }}</uri>
+            </author>
+            <source>
+                <id>{{ userpage }}</id>
+                <link rel="self" href="{{ source }}" />
+            </source>
+        {% endif %}
+        <title>{{entry.body}}</title>
+        <content>{{entry.body}}</content>
+        {% if entry.link %}
+        <link re="alternate" href="{{entry.link}}" />
+        {% endif %}
+        {% if entry.entry_id %}
+            {% if entry.subscription %}
+                {% if entry.subscription.is_service %}
+                    <id>{{userpage}}/{{entry.key.id_or_name}}</id>
+                {% else %}
+                    <id>{{ entry.entry_id}}</id>
+                {% endif %}
+            {% else %}
+                <id>{{ entry.entry_id}}</id>
+            {% endif %}
+        {% else %}
+            <id>{{userpage}}/{{entry.key.id_or_name}}</id>
+        {% endif %}
+        <published>{{entry.get_published_zulu_time}}</published>
+        <updated>{{entry.get_updated_zulu_time}}</updated>
+    </entry>
+  {% endfor %}
+{% endif %}
+</feed>
