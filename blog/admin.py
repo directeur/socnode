@@ -1,11 +1,12 @@
 from django.contrib import admin
-from blog.models import Person, File
+from blog.models import Entry
 
-class FileInline(admin.TabularInline):
-    model = File
+class EntryAdmin(admin.ModelAdmin):
+    list_display = ('author', 'author_url', 'body', 'link', 'published', 'updated')
+    search_fields = ('author',)
+    list_filter = ('published', 'updated')
+    ordering = ('-updated',)
+    fields = ('body', 'link')
 
-class PersonAdmin(admin.ModelAdmin):
-    inlines = (FileInline,)
-    list_display = ('first_name', 'last_name')
 
-admin.site.register(Person, PersonAdmin)
+admin.site.register(Entry, EntryAdmin)
