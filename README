@@ -26,6 +26,23 @@ Installation:
 6) Deploy by running:
     python manage.py update
 
+6-bis) If you want to try out the app locally:
+    python manage.py runserver
+
+7) Use python manage.py --help for more options/actions:
+for eg.
+    - python manage.py createsuperuser (to create a super user (for Admin access)
+    - append --remote for remote actions of your live appengine app
+    ...
+
+Demo :
+======
+You can see a live demo of this socnode here:
+http://socnode2.appspot.com (login with user "beta" and password 123)
+type something and then go to http://socnode.appspot.com
+(another socnode) to see your message there :)
+
+
 More information about socnodes could be found here:
 http://socnode.org
 
