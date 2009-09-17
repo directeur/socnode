@@ -18,6 +18,7 @@ from django.shortcuts import render_to_response, redirect
 from network.utils import json_response
 
 MAX_JSON_ENTRIES = getattr(settings, 'MAX_JSON_ENTRIES', 20)
+HUB = getattr(settings, 'HUB', 'http://pubsubhubbub.appspot.com')
 
 def list_all_entries(request):
     extra_context = dict(
@@ -51,6 +52,7 @@ def everyone_feed(request):
     host = 'http://%s' % request.get_host()
     entries =  Entry.all().order('-updated')[:20]
     context = dict(
+        hub = HUB,
         entries = entries,
         first_entry = entries[0],
         username = 'Everyone',
@@ -66,6 +68,7 @@ def author_feed(request, username):
     if user is None: raise Http404
     entries =  Entry.all().filter('owner = ', user).order('-updated')[:20]
     context = dict(
+        hub = HUB,
         entries = entries,
         first_entry = entries[0] if entries else None,
         username = username,
@@ -80,6 +83,7 @@ def foaf_feed(request, username):
     entries =  Entry.all().filter('subscribers_usernames = ',
             username).order('-updated')[:20]
     context = dict(
+        hub = HUB,
         entries = entries,
         first_entry = entries[0] if entries else None,
         username = username,
