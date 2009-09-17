@@ -29,6 +29,10 @@ class Entry(db.Model):
     published = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
 
+    class Meta:
+        ordering = ('-updated',)
+        verbose_name_plural = 'entries'
+
     def get_published_zulu_time(self):
         return self.published.strftime("%Y-%m-%dT%H:%M:%SZ")
 
