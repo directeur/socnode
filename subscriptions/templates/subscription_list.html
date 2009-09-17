@@ -43,6 +43,7 @@ A hub notifies you of new entries automatically (realtime)
     {% else %}
         <img src="/static/images/icons/cron.png" width="16" height="16" alt="cron job fetch" />
     {% endif%}
+    {{ subscription.title }} @ 
     <a href="{{ subscription.url }}" title="{{ subscription.url }}">{{ subscription.url|urlizetrunc:35 }}</a>
     <a href="{% url subscriptions.views.delete_subscription key=subscription.key %}" title="delete this feed" class="delsub">
         <img src="/static/images/icons/delete.png" width="12" height="12" alt="delete" />
