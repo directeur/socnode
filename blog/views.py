@@ -194,7 +194,7 @@ def edit_entry(request, key):
 @login_required
 def delete_entry(request, key):
     entry = db.get(key)
-    if entry.author != request.user.username:
+    if entry.author != request.user.username and not request.user.is_superuser:
         response = HttpResponse('unauthorized') 
         response.status_code = 401 
         return response

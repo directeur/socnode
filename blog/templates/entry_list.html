@@ -93,12 +93,12 @@
     {% endif %}
     {% if user.is_authenticated %}
         {% ifequal user.username entry.author %}
-         - 
-          <a href="{% url blog.views.edit_entry key=entry.key %}" title="edit this
-              entry" class="edit">Edit</a>
-         - 
-          <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete
-              this entry" class="delete">Delete</a>
+         - <a href="{% url blog.views.edit_entry key=entry.key %}" title="edit this entry" class="edit">Edit</a>
+         - <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
+        {% else %}
+            {% if user.is_superuser %}
+         - <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
+            {% endif %}
         {% endifequal %}
     {% endif %}
     </div>
