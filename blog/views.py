@@ -18,6 +18,7 @@ from django.shortcuts import render_to_response, redirect
 from network.utils import json_response
 
 MAX_JSON_ENTRIES = getattr(settings, 'MAX_JSON_ENTRIES', 20)
+MAX_FEED_ENTRIES = getattr(settings, 'MAX_FEED_ENTRIES', 20)
 HUB = getattr(settings, 'HUB', 'http://pubsubhubbub.appspot.com')
 
 def display(request, username='', friends=False):
@@ -54,18 +55,19 @@ def feed(request, username='', friends=False):
     host = 'http://%s' % request.get_host()
     if friends:
         entries =  Entry.all().filter('subscribers_usernames = ',
-            username).order('-updated')[:20]
+            username).order('-updated')[:MAX_FEED_ENTRIES]
         feed_title = "%s and Friends Feed" % username
         source = host+'/feed/friends/'+username
     else:
         if username:
             user = User.all().filter('username = ', username).get()
             if user is None: raise Http404
-            entries =  Entry.all().filter('owner = ', user).order('-updated')[:20]
+            entries =  Entry.all().filter('owner = ', user).\
+                    order('-updated')[:MAX_FEED_ENTRIES]
             feed_title = "%s's Feed" % username
             source = host+'/feed/'+username
         else:
-            entries =  Entry.all().order('-updated')[:20]
+            entries =  Entry.all().order('-updated')[:MAX_FEED_ENTRIES]
             feed_title = "Everyone's Feed"
             source = host+'/feed/'
 
@@ -81,7 +83,7 @@ def feed(request, username='', friends=False):
     return render_to_response('atom.xml', context, mimetype="application/atom+xml")
 
 def json_author_entries(request, username):
-    # todo: make it smarter by accepting a lasttime param
+    # todo: make it smarter by accepting a lasttime param and generalize it
     entries =  Entry.all().filter('subscribers_usernames = ',
             username).order('-updated')
     json_entries = [{
