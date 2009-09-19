@@ -51,15 +51,15 @@
                     {% if user.is_authenticated %}
                         <h2>Subscribe to my Node</h2>
                         <ul>
-                        <li><a href="{% url blog.views.author_feed username=user.username %}">My entries</a></li>
-                        <li><a href="{% url blog.views.foaf_feed username=user.username %}">Me and my friends</a></li>
+                        <li><a href="{% url user-feed username=user.username %}">My entries</a></li>
+                        <li><a href="{% url friends-feed username=user.username %}">Me and my friends</a></li>
                         </ul>
                     {% else %}
                         {% if username %}
                         <h2>Subscribe to {{ username }}'s Node</h2>
                         <ul>
-                        <li><a href="{% url blog.views.author_feed username=username %}">{{ username }}'s entries</a></li>
-                        <li><a href="{% url blog.views.foaf_feed username=username %}">{{ username }} and friends</a></li>
+                        <li><a href="{% url user-feed username=username %}">{{ username }}'s entries</a></li>
+                        <li><a href="{% url friends-feed username=username %}">{{ username }} and friends</a></li>
                         </ul>
                         {% endif %}
                     {% endif %}

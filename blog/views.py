@@ -48,48 +48,33 @@ def show_foaf_entries(request, username):
     return object_list(request, entries, paginate_by=10,
             extra_context=extra_context)
 
-def everyone_feed(request):
+def feed(request, username='', friends=False):
     host = 'http://%s' % request.get_host()
-    entries =  Entry.all().order('-updated')[:20]
-    context = dict(
-        hub = HUB,
-        entries = entries,
-        first_entry = entries[0],
-        username = 'Everyone',
-        feed_title = "%s Feed" % request.get_host(),
-        userpage = host,
-        source = host+'/feed/'
-    )
-    return render_to_response('atom.xml', context, mimetype="application/atom+xml")
-
-def author_feed(request, username):
-    host = 'http://%s' % request.get_host()
-    user = User.all().filter('username = ', username).get()
-    if user is None: raise Http404
-    entries =  Entry.all().filter('owner = ', user).order('-updated')[:20]
-    context = dict(
-        hub = HUB,
-        entries = entries,
-        first_entry = entries[0] if entries else None,
-        username = username,
-        feed_title = "%s's Feed" % username,
-        userpage = host+'/'+username,
-        source = host+'/feed/'+username
-    )
-    return render_to_response('atom.xml', context, mimetype="application/atom+xml")
-
-def foaf_feed(request, username):
-    host = 'http://%s' % request.get_host()
-    entries =  Entry.all().filter('subscribers_usernames = ',
+    if friends:
+        entries =  Entry.all().filter('subscribers_usernames = ',
             username).order('-updated')[:20]
+        feed_title = "%s and Friends Feed" % username
+        source = host+'/feed/friends/'+username
+    else:
+        if username:
+            user = User.all().filter('username = ', username).get()
+            if user is None: raise Http404
+            entries =  Entry.all().filter('owner = ', user).order('-updated')[:20]
+            feed_title = "%s's Feed" % username
+            source = host+'/feed/'+username
+        else:
+            entries =  Entry.all().order('-updated')[:20]
+            feed_title = "Everyone's Feed"
+            source = host+'/feed/'
+
     context = dict(
         hub = HUB,
         entries = entries,
         first_entry = entries[0] if entries else None,
-        username = username,
-        feed_title = "%s and Friends Feed" % username,
+        username = username if username else 'Everyone',
+        feed_title = feed_title,
         userpage = host+'/'+username,
-        source = host+'/feed/'+username
+        source = source
     )
     return render_to_response('atom.xml', context, mimetype="application/atom+xml")
 

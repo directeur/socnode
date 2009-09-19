@@ -2,19 +2,19 @@
 from django.conf.urls.defaults import *
 
 urlpatterns = patterns('blog.views',
-    (r'^create_admin_user$', 'create_admin_user'),
-    (r'^$', 'list_all_entries'),
-    (r'^create$', 'add_entry'),
-    (r'^show/(?P<key>.+)$', 'show_entry'),
-    (r'^edit/(?P<key>.+)$', 'edit_entry'),
-    (r'^delete/(?P<key>.+)$', 'delete_entry'),
+    url(r'^create_admin_user$', 'create_admin_user', name='create-admin-user'),
+    url(r'^$', 'list_all_entries', name='all-entries'),
+    url(r'^create$', 'add_entry', name='add-entry'),
+    url(r'^show/(?P<key>.+)$', 'show_entry', name='show-entry'),
+    url(r'^edit/(?P<key>.+)$', 'edit_entry', name='edit-entry'),
+    url(r'^delete/(?P<key>.+)$', 'delete_entry', name='delete-entry'),
     #feeds
-    (r'^feed/$', 'everyone_feed'),
-    (r'^feed/friends/(?P<username>.+)$', 'foaf_feed'),
-    (r'^feed/(?P<username>.+)$', 'author_feed'),
+    url(r'^feed/$', 'feed', {'username':'', 'friends':False }, name='everyone-feed'),
+    url(r'^feed/friends/(?P<username>.+)$', 'feed', {'friends':True}, name='friends-feed'),
+    url(r'^feed/(?P<username>.+)$', 'feed', {'friends':False}, name='user-feed'),
     #json
-    (r'^json/(?P<username>.+)$', 'json_author_entries'),
+    url(r'^json/(?P<username>.+)$', 'json_author_entries', name='author-json'),
     #entries
-    (r'^friends/(?P<username>.+)$', 'show_foaf_entries'),
-    (r'^(?P<username>.+)$', 'show_author_entries'),
+    url(r'^friends/(?P<username>.+)$', 'show_foaf_entries', name='foaf-entries'),
+    url(r'^(?P<username>.+)$', 'show_author_entries', name='author-entries'),
 )
