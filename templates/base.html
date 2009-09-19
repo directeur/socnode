@@ -3,10 +3,10 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-    <title>{% block title %}{% endblock %}{{ TITLE }}</title>
+    <title>{% block title %}Socnode{% endblock %}</title>
     <link href="/static/css/ui.css" rel="stylesheet" type="text/css"/>
     {% if feed_url %}
-    <link rel="alternate" href="{{ feed_url }}" type="application/atom+xml" title="{{ TITLE }}"/>
+    <link rel="alternate" href="{{ feed_url }}" type="application/atom+xml" title="{{ feed_title }}"/>
     {% endif %}
     <link rel="shortcut icon" href="/static/images/favicon.png" type="image/png"/>
     <script type="text/javascript" src="/static/js/jquery.min.js"></script>
@@ -25,10 +25,10 @@
             </p>
             {% endif %}
             <ul>
-                <li><a href="{% url blog.views.list_all_entries %}">Home</a></li>
+                <li><a href="{% url all-entries %}">Home</a></li>
                 {% if user.is_authenticated %}
-                    <li><a href="{% url blog.views.show_author_entries username=user.username %}">My entries</a></li>
-                    <li><a href="{% url blog.views.show_foaf_entries username=user.username %}">Me and my friends</a></li>
+                    <li><a href="{% url user-entries username=user.username %}">My entries</a></li>
+                    <li><a href="{% url friends-entries username=user.username %}">Me and my friends</a></li>
             </ul>
             <h2>Manage Subscriptions </h2>
             <ul>
@@ -40,8 +40,8 @@
                 {% else %}
                 <ul>
                     {% if username %}
-                    <li><a href="{% url blog.views.show_author_entries username=username %}">{{ username }}'s entries</a></li>
-                    <li><a href="{% url blog.views.show_foaf_entries username=username %}">{{ username }} and friends</a></li>
+                    <li><a href="{% url user-entries username=username %}">{{ username }}'s entries</a></li>
+                    <li><a href="{% url friends-entries username=username %}">{{ username }} and friends</a></li>
                     {% endif %}
                     <li><a href="{% url django.contrib.auth.views.login %}">Login</a></li>
                 </ul>

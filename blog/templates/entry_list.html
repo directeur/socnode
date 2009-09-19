@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load blog_tags %}
 
-{% block title %}Home{% endblock %}
+{% block title %}{{ block.super }} &bull; {{ page_title }}{% endblock %}
 
 {% block extra_head %}
 {% if username %}
@@ -74,7 +74,7 @@
     {% if entry.author_url %}
         <a href="{{ entry.author_url }}">{{ entry.author }}</a>:
     {% else %}
-        <a href="{% url blog.views.show_author_entries username=entry.author %}">{{ entry.author }}</a>:
+        <a href="{% url user-entries username=entry.author %}">{{ entry.author }}</a>:
     {% endif %}
     <span id="b-{{ entry.key }}">{{ entry.body}}</span> <br />
     {% if entry.link %}
@@ -82,7 +82,7 @@
     {% endif %}
 
     <div class="meta">
-    <a href="{% url blog.views.show_entry key=entry.key %}">{{ entry.published|bettertimesince }}</a>
+    <a href="{% url show-entry key=entry.key %}">{{ entry.published|bettertimesince }}</a>
     {% if entry.subscription %}
     - From: 
     <a href="{{ entry.subscription.url }}" title="{{ entry.subscription.title }}">
@@ -93,11 +93,11 @@
     {% endif %}
     {% if user.is_authenticated %}
         {% ifequal user.username entry.author %}
-         - <a href="{% url blog.views.edit_entry key=entry.key %}" title="edit this entry" class="edit">Edit</a>
-         - <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
+         - <a href="{% url edit-entry key=entry.key %}" title="edit this entry" class="edit">Edit</a>
+         - <a href="{% url delete-entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
         {% else %}
             {% if user.is_superuser %}
-         - <a href="{% url blog.views.delete_entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
+         - <a href="{% url delete-entry key=entry.key %}" title="delete this entry" class="delete">Delete</a>
             {% endif %}
         {% endifequal %}
     {% endif %}
@@ -108,10 +108,10 @@
 
 <div>
   {% if has_previous %}
-    <a href="{% url blog.views.list_all_entries %}?page={{ previous }}">&lt;-previous</a>
+    <a href="{% url all-entries %}?page={{ previous }}">&lt;-previous</a>
   {% endif %}
   {% if has_next %}
-    <a href="{% url blog.views.list_all_entries %}?page={{ next }}">next-&gt;</a>
+    <a href="{% url all-entries %}?page={{ next }}">next-&gt;</a>
   {% endif %}
 </div>
 {% endblock %}

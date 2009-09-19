@@ -20,31 +20,33 @@ from network.utils import json_response
 MAX_JSON_ENTRIES = getattr(settings, 'MAX_JSON_ENTRIES', 20)
 HUB = getattr(settings, 'HUB', 'http://pubsubhubbub.appspot.com')
 
-def list_all_entries(request):
-    extra_context = dict(
-        feed_url = '/feed'      
-    )
-    return object_list(request, Entry.all().order('-updated'), paginate_by=10,
-            extra_context=extra_context)
-
-def show_author_entries(request, username):
-    user = User.all().filter('username = ', username).get()
-    if user is None: raise Http404
-    extra_context = dict(
-        feed_url = '/feed/'+username,
-        username = username,
-    )
-    entries =  Entry.all().filter('owner = ', user).order('-updated')
-    return object_list(request, entries, paginate_by=10,
-            extra_context=extra_context)
-
-def show_foaf_entries(request, username):
-    extra_context = dict(
-        feed_url = '/feed/friends/'+username,
-        username = username,
-    )
-    entries =  Entry.all().filter('subscribers_usernames = ', 
+def display(request, username='', friends=False):
+    if friends:
+        entries =  Entry.all().filter('subscribers_usernames = ',
             username).order('-updated')
+        page_title = "Posts by %s and Friends" % username
+        feed_title = "%s and Friends Feed" % username
+        feed_url = '/feed/friends/'+username,
+    else:
+        if username:
+            user = User.all().filter('username = ', username).get()
+            if user is None: raise Http404
+            entries =  Entry.all().filter('owner = ', user).order('-updated')
+            page_title = "Posts by %s" % username
+            feed_title = "%s's Feed" % username
+            feed_url = '/feed/'+username,
+        else:
+            entries =  Entry.all().order('-updated')
+            page_title = "Home" 
+            feed_title = "Everyone's Feed"
+            feed_url = '/feed/'
+
+    extra_context = dict(
+        page_title = page_title,
+        feed_title = feed_title,
+        feed_url = feed_url,
+        username = username,
+    )
     return object_list(request, entries, paginate_by=10,
             extra_context=extra_context)
 
@@ -134,7 +136,8 @@ def add_entry(request):
                 )
                 return json_response(e)
             else:
-                return HttpResponseRedirect(reverse('blog.views.list_all_entries')) 
+                return HttpResponseRedirect(reverse('user-entries',
+                    kwargs={'username': request.user.username})) 
     else:
         form =EntryForm() 
 
@@ -174,7 +177,8 @@ def edit_entry(request, key):
 
     else:
         response = update_object(request, object_id=key, form_class=EntryForm,
-            post_save_redirect=reverse('blog.views.list_all_entries'))
+                post_save_redirect=reverse('user-entries',
+                    kwargs={'username':request.user.username}))
         if isinstance(response, HttpResponseRedirect):
             post_publish.send(sender=Entry, username=request.user.username,
                     host=host)
@@ -196,7 +200,8 @@ def delete_entry(request, key):
         return json_response(r)
     else:
         return delete_object(request, Entry, object_id=key,
-        post_delete_redirect=reverse('blog.views.list_all_entries'))
+            post_delete_redirect=reverse('user-entries',
+                    kwargs={'username':request.user.username}))
 
 def create_admin_user(request):
     user = User.get_by_key_name('admin')

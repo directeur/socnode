@@ -3,8 +3,8 @@
 
 {% block content %}
 <h1>Delete entry</h1>
-<a href="{% url blog.views.list_all_entries %}">Back to listing</a>
-<a href="{% url blog.views.show_entry key=object.key %}">Back to entry</a>
+<a href="{% url all-entries %}">Back to listing</a>
+<a href="{% url show-entry key=object.key %}">Back to entry</a>
 
 <p>
 Do you really want to delete {{ object.body }} by {{ object.author }}?
