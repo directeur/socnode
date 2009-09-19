@@ -3,13 +3,41 @@ import logging
 import hashlib
 from django.contrib.auth.models import User
 from django.conf import settings
+from django.db import models
 from django.db.models import permalink, signals
 from django.template.defaultfilters import slugify
 from google.appengine.ext import db
-from ragendja.dbutils import cleanup_relations
 from subscriptions.models import Subscription
 from network.pings import publish_ping
 from blog.signals import post_publish
+
+class EntryManager(models.Manager):
+    def latest(self, username='', friends=False):
+        """
+        get entries ordered by update date.
+        username = '' => all entries
+        username != '' and not Friends = > entries by username
+        username != '' and Friends = > entries by username and friends
+
+        """
+        if friends:
+            entries =  Entry.all().filter('subscribers_usernames = ',
+                username).order('-updated')
+        else:
+            if username:
+                user = User.all().filter('username = ', username).get()
+                if user is None: return []
+                else:
+                    entries =  Entry.all().filter('owner = ', user).\
+                            order('-updated')
+            else:
+                entries =  Entry.all().order('-updated')
+        return entries
+
+    def get_by_id(self, id):
+        """get entry by its entry_id (Atom ID, that is)"""
+        return  Entry.all().filter('entry_id = ', id).get()
+       
 
 class Entry(db.Model):
     """
@@ -28,6 +56,8 @@ class Entry(db.Model):
     entry_id =  db.StringProperty()
     published = db.DateTimeProperty(auto_now_add=True)
     updated = db.DateTimeProperty(auto_now=True)
+
+    objects = EntryManager()
 
     class Meta:
         ordering = ('-updated',)
@@ -56,13 +86,6 @@ class Entry(db.Model):
         #doesn't hurt for now :)
         super(Entry, self).put()
 
-def get_by_id(id):
-    # the way this is done is stupid. fix it.
-    e = Entry.all().filter('entry_id = ', id)
-    if e:
-        return e[0]
-    else:
-        return None
 
 def publish_to_hub(sender, **kwargs):
     username = kwargs['username']

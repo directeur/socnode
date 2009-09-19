@@ -13,7 +13,9 @@ urlpatterns = patterns('blog.views',
     url(r'^feed/friends/(?P<username>.+)$', 'feed', {'friends':True}, name='friends-feed'),
     url(r'^feed/(?P<username>.+)$', 'feed', {'friends':False}, name='user-feed'),
     #json
-    url(r'^json/(?P<username>.+)$', 'json_author_entries', name='author-json'),
+    url(r'^json/$', 'json', {'username':'', 'friends':False}, name='everyone-json'),
+    url(r'^json/friends/(?P<username>.+)$', 'json', {'friends':True}, name='friends-json'),
+    url(r'^json/(?P<username>.+)$', 'json', {'friends':False}, name='user-json'),
     #entries
     url(r'^friends/(?P<username>.+)$', 'display', {'friends':True}, name='friends-entries'),
     url(r'^(?P<username>.+)$', 'display', {'friends':False}, name='user-entries'),

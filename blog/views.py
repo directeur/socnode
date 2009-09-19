@@ -22,9 +22,8 @@ MAX_FEED_ENTRIES = getattr(settings, 'MAX_FEED_ENTRIES', 20)
 HUB = getattr(settings, 'HUB', 'http://pubsubhubbub.appspot.com')
 
 def display(request, username='', friends=False):
+    entries = Entry.objects.latest(username, friends)
     if friends:
-        entries =  Entry.all().filter('subscribers_usernames = ',
-            username).order('-updated')
         page_title = "Posts by %s and Friends" % username
         feed_title = "%s and Friends Feed" % username
         feed_url = '/feed/friends/'+username,
@@ -32,12 +31,10 @@ def display(request, username='', friends=False):
         if username:
             user = User.all().filter('username = ', username).get()
             if user is None: raise Http404
-            entries =  Entry.all().filter('owner = ', user).order('-updated')
             page_title = "Posts by %s" % username
             feed_title = "%s's Feed" % username
             feed_url = '/feed/'+username,
         else:
-            entries =  Entry.all().order('-updated')
             page_title = "Home" 
             feed_title = "Everyone's Feed"
             feed_url = '/feed/'
@@ -53,21 +50,17 @@ def display(request, username='', friends=False):
 
 def feed(request, username='', friends=False):
     host = 'http://%s' % request.get_host()
+    entries = Entry.objects.latest(username, friends)[:MAX_FEED_ENTRIES]
     if friends:
-        entries =  Entry.all().filter('subscribers_usernames = ',
-            username).order('-updated')[:MAX_FEED_ENTRIES]
         feed_title = "%s and Friends Feed" % username
         source = host+'/feed/friends/'+username
     else:
         if username:
             user = User.all().filter('username = ', username).get()
             if user is None: raise Http404
-            entries =  Entry.all().filter('owner = ', user).\
-                    order('-updated')[:MAX_FEED_ENTRIES]
             feed_title = "%s's Feed" % username
             source = host+'/feed/'+username
         else:
-            entries =  Entry.all().order('-updated')[:MAX_FEED_ENTRIES]
             feed_title = "Everyone's Feed"
             source = host+'/feed/'
 
@@ -82,10 +75,8 @@ def feed(request, username='', friends=False):
     )
     return render_to_response('atom.xml', context, mimetype="application/atom+xml")
 
-def json_author_entries(request, username):
-    # todo: make it smarter by accepting a lasttime param and generalize it
-    entries =  Entry.all().filter('subscribers_usernames = ',
-            username).order('-updated')
+def json(request, username, friends):
+    entries = Entry.objects.latest(username, friends)[:MAX_JSON_ENTRIES]
     json_entries = [{
         "key": str(entry.key()),
         "body": entry.body,
@@ -98,7 +89,7 @@ def json_author_entries(request, username):
         "permalink": '/show/'+str(entry.key()),
         "editlink": '/edit/'+str(entry.key()),
         "deletelink": '/delete/'+str(entry.key())
-        } for entry in entries][:MAX_JSON_ENTRIES]
+        } for entry in entries]
     json_entries.reverse()
     json = {"entries": json_entries}
     return json_response(json)

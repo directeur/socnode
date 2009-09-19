@@ -15,7 +15,7 @@ from subscriptions.models import Subscription
 from django.shortcuts import render_to_response, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from network.parsers import url_to_subscription, DataFeed
-from blog.models import Entry, get_by_id
+from blog.models import Entry
 from blog.signals import post_publish
 from subscriptions.signals import post_subscribe, pre_unsubscribe
 
@@ -113,7 +113,7 @@ def save_feed_entries(subscription, entries, host):
         logging.info('entry id is %s' % entry.entry_id)
         if not entry.source.startswith(host):
             #is there an entry with the same id? The Lernaean Hydra bug
-            old = get_by_id(entry.entry_id)
+            old = Entry.objects.get_by_id(entry.entry_id)
             if old is not None:
                 logging.info('entry already exists %s' % entry.entry_id)
                 old.body = entry.body
