@@ -3,6 +3,7 @@ from ragendja.settings_pre import *
 
 HUB = 'http://pubsubhubbub.appspot.com'
 MAX_JSON_ENTRIES = 20
+MAX_FEED_ENTRIES = 20
 
 # Increase this when you update your media on the production site, so users
 # don't have to refresh their cache. By setting this your MEDIA_URL
@@ -117,4 +118,5 @@ DATABASE_OPTIONS = {
 }
 
 AUTH_PROFILE_MODULE = 'profiles.UserProfile'
+CACHE_BACKEND = 'memcached://?timeout=0'
 from ragendja.settings_post import *

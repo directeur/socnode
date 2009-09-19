@@ -9,10 +9,7 @@ admin.autodiscover()
 handler500 = 'ragendja.views.server_error'
 
 urlpatterns = auth_patterns + patterns('',
-    #('^admin/(.*)', admin.site.root),
     (r'^admin/', include(admin.site.urls)),
-    (r'^home', 'django.views.generic.simple.direct_to_template',
-        {'template': 'main.html'}),
     # Override the default registration form
     url(r'^account/register/$', 'registration.views.register',
         kwargs={'form_class': UserRegistrationForm},
