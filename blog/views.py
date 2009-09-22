@@ -15,11 +15,18 @@ from blog.forms import EntryForm
 from blog.models import Entry
 from blog.signals import post_publish
 from django.shortcuts import render_to_response, redirect
-from network.utils import json_response
+from network.utils import json_response, forget
 
 MAX_JSON_ENTRIES = getattr(settings, 'MAX_JSON_ENTRIES', 20)
 MAX_FEED_ENTRIES = getattr(settings, 'MAX_FEED_ENTRIES', 20)
 HUB = getattr(settings, 'HUB', 'http://pubsubhubbub.appspot.com')
+
+def clear_entries_cache(username=''):
+    """Clear memacched entries by username"""
+    if username:
+        forget('/entries/latest%s_%s' % (username, True))
+        forget('/entries/latest%s_%s' % (username, False))
+    forget('/entries/latest%s_%s' % ('', False))
 
 def display(request, username='', friends=False):
     entries = Entry.objects.latest(username, friends)
@@ -113,6 +120,8 @@ def add_entry(request):
             # entries
             entry.author_url = ''
             entry.save()
+            # invalidate cache
+            clear_entries_cache(request.user.username)
             # inform the hub
             post_publish.send(sender=Entry, username=entry.author, host=host)
             if request.is_ajax():
@@ -164,6 +173,9 @@ def edit_entry(request, key):
             editlink = '/edit/'+str(entry.key()),
             deletelink = '/delete/'+str(entry.key())
         )
+        # invalidate cache
+        clear_entries_cache(request.user.username)
+        # ping hub
         post_publish.send(sender=Entry, username=request.user.username,
                 host=host)
         return json_response(e)
@@ -184,6 +196,8 @@ def delete_entry(request, key):
         response = HttpResponse('unauthorized') 
         response.status_code = 401 
         return response
+    # invalidate cache
+    clear_entries_cache(request.user.username)
     if request.is_ajax():
         entry.delete()
         r = {

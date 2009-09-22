@@ -9,9 +9,12 @@ from django.template.defaultfilters import slugify
 from google.appengine.ext import db
 from subscriptions.models import Subscription
 from network.pings import publish_ping
+from network.utils import memoize
 from blog.signals import post_publish
 
 class EntryManager(models.Manager):
+
+    @memoize('/entries/latest_%s_%s')
     def latest(self, username='', friends=False):
         """
         get entries ordered by update date.
